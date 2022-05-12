@@ -116,7 +116,7 @@ void main() {
       final CommandRunner<void> runner = createTestCommandRunner(flutterCommand);
       await runner.run(<String>['deprecated']);
 
-      expect(testLogger.errorText,
+      expect(testLogger.warningText,
         contains('The "deprecated" command is deprecated and will be removed in '
             'a future version of Flutter.'));
       expect(flutterCommand.usage,
@@ -586,6 +586,31 @@ void main() {
     }, overrides: <Type, Generator>{
       FileSystem: () => fileSystem,
       ProcessManager: () => processManager,
+<<<<<<< HEAD
+=======
+    });
+
+    testUsingContext('includes assumeInitializeFromDillUpToDate in BuildInfo', () async {
+      final DummyFlutterCommand flutterCommand = DummyFlutterCommand()..usesInitializeFromDillOption(hide: false);
+      final CommandRunner<void> runner = createTestCommandRunner(flutterCommand);
+      await runner.run(<String>['dummy', '--assume-initialize-from-dill-up-to-date']);
+      final BuildInfo buildInfo = await flutterCommand.getBuildInfo(forcedBuildMode: BuildMode.debug);
+      expect(buildInfo.assumeInitializeFromDillUpToDate, isTrue);
+    }, overrides: <Type, Generator>{
+      FileSystem: () => fileSystem,
+      ProcessManager: () => processManager,
+    });
+
+    testUsingContext('unsets assumeInitializeFromDillUpToDate in BuildInfo when disabled', () async {
+      final DummyFlutterCommand flutterCommand = DummyFlutterCommand()..usesInitializeFromDillOption(hide: false);
+      final CommandRunner<void> runner = createTestCommandRunner(flutterCommand);
+      await runner.run(<String>['dummy', '--no-assume-initialize-from-dill-up-to-date']);
+      final BuildInfo buildInfo = await flutterCommand.getBuildInfo(forcedBuildMode: BuildMode.debug);
+      expect(buildInfo.assumeInitializeFromDillUpToDate, isFalse);
+    }, overrides: <Type, Generator>{
+      FileSystem: () => fileSystem,
+      ProcessManager: () => processManager,
+>>>>>>> ee4e09cce01d6f2d7f4baebd247fde02e5008851
     });
 
     testUsingContext('dds options', () async {
